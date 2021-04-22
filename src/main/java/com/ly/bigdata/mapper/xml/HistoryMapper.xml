@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ly.bigdata.mapper.HistoryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ly.bigdata.po.History">
+        <id column="id" property="id" />
+        <result column="idcard" property="idcard" />
+        <result column="fromName" property="fromName" />
+        <result column="toName" property="toName" />
+        <result column="value" property="value" />
+        <result column="fromlat" property="fromlat" />
+        <result column="fromlng" property="fromlng" />
+        <result column="tolat" property="tolat" />
+        <result column="tolng" property="tolng" />
+    </resultMap>
+
+</mapper>
