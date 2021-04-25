@@ -3,13 +3,13 @@ package com.ly.bigdata.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ly.bigdata.po.Role;
 import com.ly.bigdata.po.RoleMenu;
 import com.ly.bigdata.service.RoleMenuService;
 import com.ly.bigdata.utils.ResponseObj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +19,7 @@ import java.util.Map;
  * </p>
  *
  * @author 陈太康
- * @since 2021-04-19
+
  */
 @RestController
 @RequestMapping("/rolemenu")
@@ -59,7 +59,6 @@ public class RoleMenuController {
         ResponseObj obj = new ResponseObj(200, map);
         return obj;
     }
-
 
 
     //添加
@@ -108,5 +107,59 @@ public class RoleMenuController {
     }
 
 
+
+
+
+
+
+
+
+    @ResponseBody
+    @GetMapping("/addMore")
+    public Object addMore(Integer roleId, Integer[] ids) {
+//        System.err.println(roleId);
+//        System.err.println(Arrays.toString(ids));
+        //组装成List
+        ArrayList<RoleMenu> list = new ArrayList<>();
+        for (int i = 0; i < ids.length; i++) {
+
+            list.add(new RoleMenu(1, roleId, ids[i]));
+        }
+//        System.err.println(list);
+        roleMenuService.addRoleMenus(list);
+        ResponseObj obj = new ResponseObj(200, null);
+        return obj;
+    }
+
+
+
+
+
+
+
+
+
+/*        @ResponseBody
+        @PostMapping(value="/delByRoleId")
+        public Object delRoleMenus(@RequestBody  Role role){
+            System.err.println("删除"+role);
+        *//*    QueryWrapper<RoleMenu> wrapper = new QueryWrapper<>();
+            wrapper.eq("roleid",roleId);
+            roleMenuService.remove(wrapper);*//*
+            ResponseObj obj = new ResponseObj(200,null);
+            return obj;
+        }*/
+
+
+    @ResponseBody
+    @RequestMapping(value = "/delByRoleId", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+    public Object delRoleMenus(Integer roleId) {
+//        System.err.println("删除"+roleId);
+        QueryWrapper<RoleMenu> wrapper = new QueryWrapper<>();
+        wrapper.eq("roleid", roleId);
+        roleMenuService.remove(wrapper);
+        ResponseObj obj = new ResponseObj(200, null);
+        return obj;
+    }
 }
 

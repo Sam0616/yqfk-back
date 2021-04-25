@@ -4,9 +4,12 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ly.bigdata.po.RoleMenu">
-        <id column="id" property="id" />
-        <result column="roleid" property="roleid" />
-        <result column="menuid" property="menuid" />
+        <id column="id" property="id"/>
+        <result column="roleid" property="roleid"/>
+        <result column="menuid" property="menuid"/>
     </resultMap>
+    <select id="getMenusByRoleId" resultType="com.ly.bigdata.po.Menus">
+       SELECT m.* FROM role_menu rm,t_role r,t_menus m WHERE rm.menuid=m.id and rm.roleid=r.id AND rm.roleid=#{roleId}
+    </select>
 
 </mapper>

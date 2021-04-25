@@ -5,10 +5,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ly.bigdata.po.User;
 import com.ly.bigdata.service.UserService;
+import com.ly.bigdata.utils.NumberUtil;
 import com.ly.bigdata.utils.ResponseObj;
+import com.ly.bigdata.utils.SendMessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +23,7 @@ import java.util.Map;
  * </p>
  *
  * @author 陈太康
- * @since 2021-04-19
+
  */
 @RestController
 @RequestMapping("/user")
@@ -76,12 +80,12 @@ public class UserController {
     @PostMapping("/updUser")
     @ResponseBody
     public Object updUser(@RequestBody User user) {
-        System.err.println("~~~~~~~~~~~~~~~~~~~~"+user);
+        System.err.println("~~~~~~~~~~~~~~~~~~~~" + user);
         boolean b = userService.saveOrUpdate(user);
-        if (b==true) {
+        if (b == true) {
             ResponseObj obj = new ResponseObj(200, null);
             return obj;
-        }else {
+        } else {
             ResponseObj obj = new ResponseObj(404, null);
             return obj;
         }
@@ -141,19 +145,49 @@ public class UserController {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username", username).eq("password", password);
         User user = userService.getOne(wrapper, false);
-        if (user!=null){
+        if (user != null) {
             HashMap<String, Object> map = new HashMap<>();
-            map.put("data",user);
-            map.put("flag","true");
+            map.put("data", user);
+            map.put("flag", "true");
             ResponseObj obj = new ResponseObj(200, map);
             return obj;
-        }else {
+        } else {
             HashMap<String, Object> map = new HashMap<>();
-            map.put("data",null);
-            map.put("flag","false");
+            map.put("data", null);
+            map.put("flag", "false");
             ResponseObj obj = new ResponseObj(404, map);
             return obj;
         }
     }
+
+    //获取短信验证码
+    @ResponseBody
+    @RequestMapping("/getCode")
+    public void getCode(String phone, HttpSession session) {
+        System.err.println("正在获取短信验证码");
+        String forNumber = NumberUtil.getForNumber();
+        session.setAttribute("forNumber", forNumber);
+        session.setMaxInactiveInterval(120);
+        String[] datas = {forNumber, "1分钟", "变量3"};
+        SendMessageUtil.sendMsg(phone, datas);
+    }
+
+    @ResponseBody
+    @RequestMapping("/check")
+    public Object check(String code,HttpSession session) {
+        String forNumber = (String) session.getAttribute("forNumber");
+        boolean b = forNumber.equals(code);
+        if (b=true){
+            HashMap<Object, Object> map = new HashMap<>();
+            map.put("flag",true);
+            return map;
+        }else{
+            HashMap<Object, Object> map = new HashMap<>();
+            map.put("flag",false);
+            return map;
+        }
+    }
+
+
 }
 

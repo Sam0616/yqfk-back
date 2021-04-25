@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author 陈太康
  * @since 2021-04-19
  */
+
 public interface RoleMapper extends BaseMapper<Role> {
 
 }

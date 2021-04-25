@@ -20,7 +20,6 @@ import java.util.Map;
  * </p>
  *
  * @author 陈太康
- * @since 2021-04-19
  */
 @RestController
 @RequestMapping("/role")
@@ -54,8 +53,9 @@ public class RoleController {
         Map<String, Object> map = new HashMap<>();
 
         map.put("data", page.getRecords());
+        map.put("pageNo", page.getCurrent());
+        map.put("pageSize", page.getSize());
         map.put("count", page.getTotal());
-        map.put("code", 0);
         map.put("msg", "");
         ResponseObj obj = new ResponseObj(200, map);
         return obj;
@@ -105,5 +105,7 @@ public class RoleController {
         ResponseObj obj = new ResponseObj(200, byId);
         return obj;
     }
+
+
 }
 
